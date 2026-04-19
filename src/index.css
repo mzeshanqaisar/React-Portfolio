@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+}
+
+section {
+  scroll-margin-top: 96px;
+}
+
+@theme {
+  --color-primary-fixed: #a1efff;
+  --color-inverse-primary: #006876;
+  --color-secondary: #e9c176;
+  --color-surface-container-low: #1c1b1b;
+  --color-tertiary: #dec482;
+  --color-on-secondary: #412d00;
+  --color-on-primary-fixed-variant: #004e59;
+  --color-secondary-container: #604403;
+  --color-primary-container: #00bcd4;
+  --color-surface-variant: #353534;
+  --color-on-secondary-container: #dab36a;
+  --color-error-container: #93000a;
+  --color-on-background: #e5e2e1;
+  --color-on-error: #690005;
+  --color-surface-dim: #131313;
+  --color-primary: #44d8f1;
+  --color-on-tertiary-fixed: #241a00;
+  --color-on-primary-container: #004650;
+  --color-on-secondary-fixed: #261900;
+  --color-on-primary-fixed: #001f25;
+  --color-on-error-container: #ffdad6;
+  --color-tertiary-container: #c1a969;
+  --color-surface-bright: #393939;
+  --color-surface-container-high: #2a2a2a;
+  --color-primary-fixed-dim: #44d8f1;
+  --color-on-tertiary-container: #4e3d06;
+  --color-error: #ffb4ab;
+  --color-outline-variant: #3c494c;
+  --color-outline: #869396;
+  --color-surface-container-highest: #353534;
+  --color-secondary-fixed-dim: #e9c176;
+  --color-on-secondary-fixed-variant: #5d4201;
+  --color-secondary-fixed: #ffdea5;
+  --color-surface-tint: #44d8f1;
+  --color-on-surface-variant: #bbc9cc;
+  --color-on-surface: #e5e2e1;
+  --color-on-tertiary-fixed-variant: #56450e;
+  --color-tertiary-fixed-dim: #dec482;
+  --color-inverse-surface: #e5e2e1;
+  --color-inverse-on-surface: #313030;
+  --color-tertiary-fixed: #fbe09b;
+  --color-background: #131313;
+  --color-surface-container: #201f1f;
+  --color-on-tertiary: #3d2f00;
+  --color-surface: #131313;
+  --color-on-primary: #00363e;
+  --color-surface-container-lowest: #0e0e0e;
+
+  /* We'll use CSS mappings for next/font */
+  --font-headline: var(--font-manrope);
+  --font-body: var(--font-inter);
+  --font-label: var(--font-inter);
+}
+
+@layer utilities {
+  .glow-primary:hover {
+    text-shadow: 0 0 10px rgba(68, 216, 241, 0.4);
+  }
+  .bracket-tl {
+    border-top: 2px solid #e9c176;
+    border-left: 2px solid #e9c176;
+  }
+  .bracket-br {
+    border-bottom: 2px solid #e9c176;
+    border-right: 2px solid #e9c176;
+  }
+  .glass-panel {
+    background: rgba(53, 53, 52, 0.6);
+    backdrop-filter: blur(12px);
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+}
+
+body {
+  font-family: var(--font-body);
+}
