@@ -1,51 +1,67 @@
-import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+
 import TopNavBar from "./components/TopNavBar";
 import Hero from "./components/Hero";
 import ProjectGallery from "./components/ProjectGallery";
 import Stats from "./components/Stats";
 import Footer from "./components/Footer";
+import ProjectDetail from "./components/ProjectDetail";
 
+function Home() {
+  return (
+    <>
+      <section id="home">
+        <Hero />
+      </section>
 
+      <section id="projects">
+        <ProjectGallery />
+      </section>
 
+      <section id="stats">
+        <Stats />
+      </section>
+
+      <section id="contact">
+        <Footer />
+      </section>
+    </>
+  );
+}
 
 function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
     }
   }, []);
 
   return (
-    <div className="dark min-h-screen bg-black text-white antialiased">
-      {/* Decorative brackets (same idea as layout.tsx) */}
-      <div className="fixed top-8 left-8 w-12 h-12 opacity-40 z-0 border-t-2 border-l-2 border-white"></div>
-      <div className="fixed bottom-8 right-8 w-12 h-12 opacity-40 z-0 border-b-2 border-r-2 border-white"></div>
+    <BrowserRouter>
+      <div className="dark min-h-screen bg-black text-white antialiased">
 
-      <TopNavBar />
+        {/* Decorations */}
+        <div className="fixed top-8 left-8 w-12 h-12 opacity-40 z-0 border-t-2 border-l-2 border-white"></div>
+        <div className="fixed bottom-8 right-8 w-12 h-12 opacity-40 z-0 border-b-2 border-r-2 border-white"></div>
 
-      <main className="relative z-10 pt-32 px-8 md:px-24 mx-auto min-h-screen max-w-[1280px]">
+        <TopNavBar />
 
-        <section id="home">
-          <Hero />
-        </section>
+        <main className="relative z-10 px-8 md:px-24 mx-auto min-h-screen max-w-[1280px]">
 
-        <section id="projects">
-          <ProjectGallery />
-        </section>
+          <Routes>
+            {/* HOME PAGE */}
+            <Route path="/" element={<Home />} />
 
-        <section id="stats">
-          <Stats />
-        </section>
+            {/* PROJECT DETAIL PAGE */}
+            <Route path="/project/:id" element={<ProjectDetail />} />
+          </Routes>
 
-      </main>
-
-      <section id="contact">
-        <Footer />
-      </section>
-
-    </div>
+        </main>
+      </div>
+    </BrowserRouter>
   );
 }
 
