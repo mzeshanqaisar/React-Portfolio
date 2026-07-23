@@ -1,13 +1,41 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, useInView } from "framer-motion";
+
+function Counter({ target, suffix = "+" }) {
+  const ref = React.useRef(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    let current = 0;
+    const step = Math.max(1, Math.ceil(target / 30));
+    const interval = setInterval(() => {
+      current += step;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(interval);
+      } else {
+        setCount(current);
+      }
+    }, 40);
+    return () => clearInterval(interval);
+  }, [inView, target]);
+
+  return (
+    <span ref={ref} className="block font-headline text-4xl font-thin text-secondary mb-1">
+      {count}{suffix}
+    </span>
+  );
+}
 
 export default function Stats() {
-const stats = [
-  { value: "1+", label: "Years Experience" },
-  { value: "12+", label: "Projects Built" },
-  { value: <>React & <br /> React Native</>, label: "Core Stack" },
-  { value: "UI Focused", label: "Frontend Style" }
-];
+  const stats = [
+    { type: "counter", target: 1, label: "Years Experience" },
+    { type: "counter", target: 12, label: "Projects Built" },
+    { type: "text", value: <>React & <br /> React Native</>, label: "Core Stack" },
+    { type: "text", value: "UI Focused", label: "Frontend Style" },
+  ];
 
   return (
     <section className="mb-32 py-10 border-y border-outline-variant/10">
@@ -30,28 +58,29 @@ const stats = [
       </div>
 
       {/* STATS SECTION */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
 
-      {stats.map((item, index) => (
-  <motion.div
-    key={index}
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.5 }}
-    transition={{ duration: 0.6, delay: index * 0.15 }}
-    className="text-center md:text-left"
-  >
-
-    <span className="block font-headline text-4xl font-thin text-secondary mb-1">
-      {item.value}
-    </span>
-
-    <span className="font-label text-[11px] uppercase tracking-widest text-on-surface-variant">
-      {item.label}
-    </span>
-
-  </motion.div>
-))}
+        {stats.map((stat, index) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.6, delay: index * 0.15 }}
+            className="glass-card glow-hover rounded-2xl p-6 text-center md:text-left"
+          >
+            {stat.type === "counter" ? (
+              <Counter target={stat.target} suffix={stat.suffix} />
+            ) : (
+              <span className="block font-headline text-2xl font-thin text-secondary mb-1">
+                {stat.value}
+              </span>
+            )}
+            <span className="font-label text-[11px] uppercase tracking-widest text-on-surface-variant">
+              {stat.label}
+            </span>
+          </motion.div>
+        ))}
 
       </div>
 

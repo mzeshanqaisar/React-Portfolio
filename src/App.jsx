@@ -1,12 +1,18 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect, useLayoutEffect } from "react";
+import { AnimatePresence, MotionConfig } from "framer-motion";
 
 import TopNavBar from "./components/TopNavBar";
 import Hero from "./components/Hero";
+import TechStack from "./components/TechStack";
 import ProjectGallery from "./components/ProjectGallery";
 import Stats from "./components/Stats";
+import Services from "./components/Services";
+import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import ProjectDetail from "./components/ProjectDetail";
+import NotFound from "./components/NotFound";
+import PageTransition from "./components/PageTransition";
 
 function Home() {
   return (
@@ -14,6 +20,8 @@ function Home() {
       <section id="home">
         <Hero />
       </section>
+
+      <TechStack />
 
       <section id="projects">
         <ProjectGallery />
@@ -23,45 +31,73 @@ function Home() {
         <Stats />
       </section>
 
+      <section id="services">
+        <Services />
+      </section>
+
       <section id="contact">
-        <Footer />
+        <Contact />
       </section>
     </>
   );
 }
 
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        {/* HOME PAGE */}
+        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+
+        {/* PROJECT DETAIL PAGE */}
+        <Route path="/project/:id" element={<PageTransition><ProjectDetail /></PageTransition>} />
+
+        {/* 404 */}
+        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+      </Routes>
+    </AnimatePresence>
+  );
+}
+
+function AppShell() {
+  const location = useLocation();
+  const isProjectDetail = location.pathname.startsWith("/project/");
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [location.pathname]);
+
+  return (
+    <div className="dark min-h-screen bg-background text-on-surface antialiased">
+
+      {!isProjectDetail && <TopNavBar />}
+
+      <main className="relative z-10 px-8 md:px-24 mx-auto min-h-screen max-w-[1280px]">
+        <AnimatedRoutes />
+      </main>
+
+      <div className={isProjectDetail ? "pb-20 md:pb-0" : ""}>
+        <Footer />
+      </div>
+    </div>
+  );
+}
+
 function App() {
   useEffect(() => {
-    window.scrollTo(0, 0);
-
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
   }, []);
 
   return (
-    <BrowserRouter>
-      <div className="dark min-h-screen bg-black text-white antialiased">
-
-        {/* Decorations */}
-        <div className="fixed top-8 left-8 w-12 h-12 opacity-40 z-0 border-t-2 border-l-2 border-white"></div>
-        <div className="fixed bottom-8 right-8 w-12 h-12 opacity-40 z-0 border-b-2 border-r-2 border-white"></div>
-
-        <TopNavBar />
-
-        <main className="relative z-10 px-8 md:px-24 mx-auto min-h-screen max-w-[1280px]">
-
-          <Routes>
-            {/* HOME PAGE */}
-            <Route path="/" element={<Home />} />
-
-            {/* PROJECT DETAIL PAGE */}
-            <Route path="/project/:id" element={<ProjectDetail />} />
-          </Routes>
-
-        </main>
-      </div>
-    </BrowserRouter>
+    <MotionConfig reducedMotion="user">
+      <BrowserRouter>
+        <AppShell />
+      </BrowserRouter>
+    </MotionConfig>
   );
 }
 
