@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect, useLayoutEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation, useNavigationType } from "react-router-dom";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { AnimatePresence, MotionConfig } from "framer-motion";
 
 import TopNavBar from "./components/TopNavBar";
@@ -61,12 +61,27 @@ function AnimatedRoutes() {
   );
 }
 
+const scrollPositions = new Map();
+
 function AppShell() {
   const location = useLocation();
+  const navigationType = useNavigationType();
   const isProjectDetail = location.pathname.startsWith("/project/");
+  const currentKeyRef = useRef(location.key);
+
+  useEffect(() => {
+    const onScroll = () => scrollPositions.set(currentKeyRef.current, window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useLayoutEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    currentKeyRef.current = location.key;
+    if (navigationType === "POP") {
+      window.scrollTo({ top: scrollPositions.get(location.key) ?? 0, left: 0, behavior: "instant" });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
   }, [location.pathname]);
 
   return (
