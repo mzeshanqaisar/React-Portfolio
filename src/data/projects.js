@@ -45,6 +45,9 @@ const projects = [
     title: "Portfolio Website",
     description: "Modern responsive portfolio with animations and clean UI.",
     image: "/portfolio.svg",
+    gallery: [
+      "/projects/portfolio-website.png"
+    ],
     tech: ["React", "Tailwind", "Framer Motion"],
     overview: "A personal portfolio to showcase my work and skills.",
     problem: "Traditional portfolios are static and not engaging.",
